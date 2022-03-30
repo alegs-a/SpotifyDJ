@@ -8,7 +8,7 @@
 import SwiftUI
 import SQLite3
 
-var setlists = [Setlist(title: "Setlist 1", id: "a", duration: 1, author: "me", tracks: [track(id: "z", title: "My Track", duration: 3)]), Setlist(title: "Setlist 2", id: "b", duration: 4, author: "Not Me", tracks: [track(id: "y", title: "2's first track", duration: 5), track(id: "x", title: "2's second track", duration: 6)])]
+var setlists = [Setlist(title: "Setlist 1", id: "a", author: "me", tracks: [Track(id: "z", title: "My Track", duration: 12202)]), Setlist(title: "Setlist 2", id: "b", author: "Not Me", tracks: [Track(id: "y", title: "2's first track", duration: 14324), Track(id: "x", title: "2's second track", duration: 1204)])]
 
 struct ContentView: View {
     var body: some View {

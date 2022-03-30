@@ -10,8 +10,15 @@ import Foundation
 struct Setlist: Identifiable {
     var title: String
     var id: String
-    var duration: Int
+    var duration: Int {
+        // Duration is computed property; only has getter method, so cannot be written to. 
+        var totalDuration = 0
+        for track in tracks {
+            totalDuration += track.duration
+        }
+        return totalDuration
+    }
     var author: String
-    var tracks: [track]
+    var tracks: [Track]
     var NStitle: NSString { title as NSString }
 }
