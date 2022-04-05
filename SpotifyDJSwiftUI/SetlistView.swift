@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct SetlistView: View {
-    var setlist: Setlist
+    
+    @Binding var setlist: Setlist
+    
     var body: some View {
         VStack(alignment: .leading) {
             Text(setlist.title)
@@ -16,20 +18,27 @@ struct SetlistView: View {
             HStack {
                 Text(setlist.author)
                 Text("|")
-                Text("Duration: \(setlist.duration)")
+                Text("Duration: \(setlist.durationMinsSecs)")
             }
             List {
                 ForEach(setlist.tracks) { track in
                     TrackRow(track: track)
                 }
+                .onMove(perform: move)
+            }
+            .toolbar {
+                EditButton()
             }
         }
         .padding()
     }
-}
-
-struct SetlistView_Previews: PreviewProvider {
-    static var previews: some View {
-        SetlistView(setlist: setlists[1])
+    func move(from source: IndexSet, to destination: Int) {
+        setlist.tracks.move(fromOffsets: source, toOffset: destination)
     }
 }
+
+//struct SetlistView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        SetlistView($setlists[0])
+//    }
+//}

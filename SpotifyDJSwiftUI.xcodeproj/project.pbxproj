@@ -18,6 +18,8 @@
 		FA2DA09427ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA09327ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift */; };
 		FA2DA09627ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA09527ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift */; };
 		FA2DA0A327ED50E5003F52B8 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA0A227ED50E5003F52B8 /* Search.swift */; };
+		FA535A6127F3E33D00E8289B /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A6027F3E33D00E8289B /* Functions.swift */; };
+		FA535A6327FBF29000E8289B /* SetlistList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A6227FBF29000E8289B /* SetlistList.swift */; };
 		FAE034D627F2B44600352863 /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE034D527F2B44600352863 /* TrackRow.swift */; };
 /* End PBXBuildFile section */
 
@@ -53,6 +55,8 @@
 		FA2DA09327ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDJSwiftUIUITests.swift; sourceTree = "<group>"; };
 		FA2DA09527ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDJSwiftUIUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		FA2DA0A227ED50E5003F52B8 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		FA535A6027F3E33D00E8289B /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		FA535A6227FBF29000E8289B /* SetlistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetlistList.swift; sourceTree = "<group>"; };
 		FAE034D527F2B44600352863 /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -116,7 +120,9 @@
 				FA2DA07827ED4C8F003F52B8 /* SpotifyDJSwiftUIApp.swift */,
 				FA2DA07A27ED4C8F003F52B8 /* ContentView.swift */,
 				FA003BBF27F2AD4900970872 /* SetlistView.swift */,
+				FA535A6227FBF29000E8289B /* SetlistList.swift */,
 				FAE034D527F2B44600352863 /* TrackRow.swift */,
+				FA535A6027F3E33D00E8289B /* Functions.swift */,
 				FA2DA0A227ED50E5003F52B8 /* Search.swift */,
 				FA003BBA27F2A5B600970872 /* Models */,
 				FA2DA07C27ED4C91003F52B8 /* Assets.xcassets */,
@@ -283,6 +289,8 @@
 				FA2DA0A327ED50E5003F52B8 /* Search.swift in Sources */,
 				FA2DA07B27ED4C8F003F52B8 /* ContentView.swift in Sources */,
 				FAE034D627F2B44600352863 /* TrackRow.swift in Sources */,
+				FA535A6127F3E33D00E8289B /* Functions.swift in Sources */,
+				FA535A6327FBF29000E8289B /* SetlistList.swift in Sources */,
 				FA2DA07927ED4C8F003F52B8 /* SpotifyDJSwiftUIApp.swift in Sources */,
 				FA003BBE27F2A60900970872 /* Setlist.swift in Sources */,
 				FA003BBC27F2A5E900970872 /* Track.swift in Sources */,

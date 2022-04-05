@@ -8,9 +8,9 @@
 import SwiftUI
 import SQLite3
 
-var setlists = [Setlist(title: "Setlist 1", id: "a", author: "me", tracks: [Track(id: "z", title: "My Track", duration: 12202)]), Setlist(title: "Setlist 2", id: "b", author: "Not Me", tracks: [Track(id: "y", title: "2's first track", duration: 14324), Track(id: "x", title: "2's second track", duration: 1204)])]
-
 struct ContentView: View {
+    @State private var setlists = [Setlist(id: "a", title: "Setlist 1", author: "me", tracks: [Track(id: "z", title: "My Track", artist: "Bananas Man", duration: 197499)]), Setlist(id: "b", title: "Setlist 2", author: "Not Me", tracks: [Track(id: "y", title: "Longest song", artist: "Very Cool Songwriter", duration: 507998), Track(id: "x", title: "Shortest song", artist: "A Very Cool and Awesome Artist with a Very Long Name that is truly ridicuolous", duration: 25600)])]
+
     var body: some View {
         NavigationView {
             List {
@@ -34,12 +34,17 @@ struct ContentView: View {
                 
                 Label("Create setlist", systemImage: "plus.square")
                 
+//                NavigationView {
+//                    List($setlists) { $setlist in
+//                        Text(setlist.title)
+//                    }
+//                }
                 
-                ForEach(setlists) { setlist in
-                    NavigationLink(destination: SetlistView(setlist: setlist)) {
+                ForEach($setlists) { $setlist in
+                    NavigationLink(destination: SetlistView(setlist: $setlist)) {
+                        /* Making this binding work took bloody ages, solution and explanation in Paul B's answer at https://stackoverflow.com/questions/57340575/binding-and-foreach-in-swiftui*/
                         Text(setlist.title)
                     }
-                    
                 }
             }
             .navigationTitle("SpotifyDJ")
