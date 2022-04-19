@@ -12,21 +12,16 @@ let pathToDatabase = "/Users/alex/Documents/School/2022/Digital/IA2/SpotifyDJSwi
 
 struct ContentView: View {
     @State private var setlists: [Setlist]
-//    = [Setlist(id: "a", title: "Setlist 1", author: "me", tracks: [Track(id: "z", title: "My Track", artist: "Bananas Man", duration: 197499)]), Setlist(id: "b", title: "Setlist 2", author: "Not Me", tracks: [Track(id: "y", title: "Longest song", artist: "Very Cool Songwriter", duration: 507998), Track(id: "x", title: "Shortest song", artist: "A Very Cool and Awesome Artist with a Very Long Name that is truly ridicuolous", duration: 25600)])]
+    @State private var showingAddSetlist: Bool = false
     
     let db: SQLiteDatabase
     
     init() {
-        do {
-            try db = SQLiteDatabase.open(path: pathToDatabase)
-            print("Database connection: Database connected successfully")
-        } catch SQLiteError.OpenDatabase(_) {
-            print("Database connection: Failed to connect to database")
-        } catch {
-            print("Something has gone horribly terribly wrong")
-        }
-        
-        
+        try! db = SQLiteDatabase.open(path: pathToDatabase)
+        /* Why it's fine to ignore errors from SQLiteDatabase.open()
+         `try!` asserts at runtime that SQLiteDatabase.open() will not throw an error, despite it being a throwing function. This is appropriate because database.db is bundled with the app at compile, meaning that it will never not be present. Were it to be lost, the entire functionality of the app would be lost, so a catastrophic runtime error is appropriate.
+         */
+        setlists = db.getSetlists() ?? []
     }
 
     var body: some View {
@@ -50,7 +45,12 @@ struct ContentView: View {
                 
                 Divider()
                 
-                Label("Create setlist", systemImage: "plus.square")
+                Button("Create Setlist") {
+                            showingAddSetlist.toggle()
+                        }
+                        .sheet(isPresented: $showingAddSetlist) {
+                            CreateSetlist(setlists: $setlists)
+                        }
                 
                 ForEach($setlists) { $setlist in
                     NavigationLink(destination: SetlistView(setlist: $setlist)) {

@@ -16,9 +16,10 @@ struct SetlistView: View {
             Text(setlist.title)
                 .font(.largeTitle)
             HStack {
-                Text(setlist.author)
+                Text(setlist.author.name)
                 Text("|")
                 Text("Duration: \(setlist.durationMinsSecs)")
+                Text("ID: \(setlist.id)")
             }
             List {
                 ForEach(setlist.tracks) { track in

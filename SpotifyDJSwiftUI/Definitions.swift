@@ -53,6 +53,7 @@ class SQLiteDatabase {
     static func open(path: String) throws -> SQLiteDatabase {
         var db: OpaquePointer?
         if sqlite3_open(path, &db) == SQLITE_OK {
+            print("DEBUG: Database connected")
             return(SQLiteDatabase(dbPointer: db))
         } else {
             defer { // `defer` statement is run when execution leaves the current scope, i.e. the `else` clause. This avoids awkward conditionals to make sure the database connection is closed no matter the path execution takes.
@@ -86,12 +87,61 @@ extension SQLiteDatabase {
         /* prepareStatement() returns a compiled SQL statement if it compiles OK, and an error if compilation fails.*/
         var statement: OpaquePointer?
         guard sqlite3_prepare_v2(dbPointer, sql, -1, &statement, nil) == SQLITE_OK else {
+            print("DEBUG: Failed to compile SQL statement")
             throw SQLiteError.Prepare(message: errorMessage)
         }
         return statement
     }
 }
 
+extension SQLiteDatabase {
+    func createSetlist(setlist: Setlist) throws {
+        /* Adds the passed Setlist to the setlists table in SQL database */
+        let insertSQL = "INSERT INTO setlists (setlist_ID, name, author_user_ID, description) VALUES (?, ?, ?, ?)"
+        let insertStatement = try prepareStatement(sql: insertSQL )
+        defer {
+            sqlite3_finalize(insertStatement)
+        }
+        guard
+            sqlite3_bind_int(insertStatement, 1, setlist.i32id) == SQLITE_OK
+                && sqlite3_bind_text(insertStatement, 2, setlist.NStitle.utf8String, -1, nil) == SQLITE_OK
+                && sqlite3_bind_int(insertStatement, 3, setlist.i32authorID) == SQLITE_OK
+                && sqlite3_bind_text(insertStatement, 4, setlist.NSdescription.utf8String, -1, nil) == SQLITE_OK
+        else {
+            throw SQLiteError.Bind(message: errorMessage)
+        }
+        guard sqlite3_step(insertStatement) == SQLITE_DONE else {
+            throw SQLiteError.Step(message: errorMessage)
+        }
+        print("DEBUG: Successfully inserted row")
+    }
+}
+
+extension SQLiteDatabase {
+    func getSetlists() -> [Setlist]? {
+        let querySQL = "SELECT setlist_ID, name, author_user_ID, description FROM setlists;"
+        guard let queryStatement = try? prepareStatement(sql: querySQL) else {
+            return nil
+        }
+        defer {
+            sqlite3_finalize(queryStatement)
+        }
+        var output: [Setlist] = []
+        while sqlite3_step(queryStatement) == SQLITE_ROW {
+            output.append(Setlist(
+                /* NOTE: Because the table 'setlists' was declared with the field
+                    setlist_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                 SQLite does not create the extra field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
+                id: Int(sqlite3_column_int(queryStatement, 0)),
+                title: String(cString: sqlite3_column_text(queryStatement, 1)),
+                author: User(id: 1, name: "dummy", description: "dummy"),
+                description: String(cString: sqlite3_column_text(queryStatement, 3)),
+                tracks: [])
+            )
+        }
+        return output
+    }
+}
 
 
 func doNothing() { } // For debugging purposes

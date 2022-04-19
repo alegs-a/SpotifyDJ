@@ -8,9 +8,10 @@
 import Foundation
 
 struct Setlist: Identifiable {
-    var id: String
+    var id: Int
     var title: String
-    var author: String
+    var author: User
+    var description: String
     var tracks: [Track]
     var duration: Int {
         // Duration is computed property; only has getter method, so cannot be written to. 
@@ -21,7 +22,11 @@ struct Setlist: Identifiable {
         return totalDuration
     }
     var durationMinsSecs: String { millisToMinsSecs(milliseconds: duration)}
+    
+    var i32id: Int32 { Int32(Double(id)) }
     var NStitle: NSString { title as NSString }
+    var i32authorID: Int32 { Int32(Double(author.id)) }
+    var NSdescription: NSString { description as NSString }
 }
 
 /*
