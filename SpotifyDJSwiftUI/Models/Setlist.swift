@@ -14,7 +14,7 @@ struct Setlist: Identifiable {
     var description: String
     var tracks: [Track]
     var duration: Int {
-        // Duration is computed property; only has getter method, so cannot be written to. 
+        // duration is computed property; only has getter method, so cannot be written to. 
         var totalDuration = 0
         for track in tracks {
             totalDuration += track.duration

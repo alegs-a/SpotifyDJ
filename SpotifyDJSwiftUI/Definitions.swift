@@ -95,18 +95,17 @@ extension SQLiteDatabase {
 }
 
 extension SQLiteDatabase {
-    func createSetlist(setlist: Setlist) throws {
+    func createSetlist(name: String, authorUserID: Int, description: String) throws {
         /* Adds the passed Setlist to the setlists table in SQL database */
-        let insertSQL = "INSERT INTO setlists (setlist_ID, name, author_user_ID, description) VALUES (?, ?, ?, ?)"
+        let insertSQL = "INSERT INTO setlists (name, author_user_ID, description) VALUES (?, ?, ?)" // setlist_ID is omitted since it is a PRIMARY KEY AUTOINCREMENT field, meaning it automatically populates itself with a unique value upon record creation.
         let insertStatement = try prepareStatement(sql: insertSQL )
         defer {
             sqlite3_finalize(insertStatement)
         }
         guard
-            sqlite3_bind_int(insertStatement, 1, setlist.i32id) == SQLITE_OK
-                && sqlite3_bind_text(insertStatement, 2, setlist.NStitle.utf8String, -1, nil) == SQLITE_OK
-                && sqlite3_bind_int(insertStatement, 3, setlist.i32authorID) == SQLITE_OK
-                && sqlite3_bind_text(insertStatement, 4, setlist.NSdescription.utf8String, -1, nil) == SQLITE_OK
+            sqlite3_bind_text(insertStatement, 1, NSString(string: name).utf8String, -1, nil) == SQLITE_OK
+                && sqlite3_bind_int(insertStatement, 2, Int32(Double(authorUserID))) == SQLITE_OK
+                && sqlite3_bind_text(insertStatement, 3, NSString(string: description).utf8String, -1, nil) == SQLITE_OK
         else {
             throw SQLiteError.Bind(message: errorMessage)
         }
@@ -131,7 +130,7 @@ extension SQLiteDatabase {
             output.append(Setlist(
                 /* NOTE: Because the table 'setlists' was declared with the field
                     setlist_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                 SQLite does not create the extra field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
+                 SQLite does not create the extra hidden field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
                 id: Int(sqlite3_column_int(queryStatement, 0)),
                 title: String(cString: sqlite3_column_text(queryStatement, 1)),
                 author: User(id: 1, name: "dummy", description: "dummy"),
