@@ -46,14 +46,14 @@ struct ContentView: View {
                 Divider()
                 
                 Button("Create Setlist") {
-                            showingAddSetlist.toggle()
-                        }
-                        .sheet(isPresented: $showingAddSetlist) {
-                            CreateSetlist(setlists: $setlists)
-                        }
-                
+                        showingAddSetlist.toggle()
+                    }
+                    .sheet(isPresented: $showingAddSetlist) {
+                        CreateSetlist(setlists: $setlists)
+                    }
+            
                 ForEach($setlists) { $setlist in
-                    NavigationLink(destination: SetlistView(setlist: $setlist)) {
+                    NavigationLink(destination: SetlistView(setlist: $setlist, setlists: $setlists)) {
                         /* Making this binding work took bloody ages, solution and explanation in Paul B's answer at https://stackoverflow.com/questions/57340575/binding-and-foreach-in-swiftui*/
                         Text(setlist.title)
                     }

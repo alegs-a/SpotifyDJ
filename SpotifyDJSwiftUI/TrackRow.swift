@@ -15,10 +15,10 @@ struct TrackRow: View {
             HStack {
                 VStack(alignment: .leading) {
                     Text(track.title)
-                    Text(track.artist)
-                        .font(.caption)
-                        .frame(width: 200)
-                        .lineLimit(1)
+//                    Text(track.artist)
+//                        .font(.caption)
+//                        .frame(width: 200)
+//                        .lineLimit(1)
                 }
                 Spacer()
             }
@@ -39,10 +39,10 @@ struct TrackRow: View {
     }
 }
 
-struct TrackRow_Previews: PreviewProvider {
-    static var previews: some View {
-        TrackRow(track: Setlist(id: 1, title: "Setlist 1", author: User(id: 1, name: "Me", description: "no"), description: "Cool setlist bro", tracks: [Track(id: "z", title: "My Track", artist: "Bananas Man", duration: 197499)]).tracks[0])
-//        TrackRow(track: setlists[1].tracks[0])
-//            .frame(width: 700, height: 80)
-    }
-}
+//struct TrackRow_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TrackRow(track: Setlist(id: 1, title: "Setlist 1", author: User(id: 1, name: "Me", description: "no"), description: "Cool setlist bro", tracks: [Track(id: "z", title: "My Track", artist: "Bananas Man", duration: 197499)]).tracks[0])
+////        TrackRow(track: setlists[1].tracks[0])
+////            .frame(width: 700, height: 80)
+//    }
+//}

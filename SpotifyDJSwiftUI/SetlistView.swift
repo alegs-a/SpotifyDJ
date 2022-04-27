@@ -10,11 +10,24 @@ import SwiftUI
 struct SetlistView: View {
     
     @Binding var setlist: Setlist
+    @Binding var setlists: [Setlist]
+    @State var isShowingEditSetlist: Bool = false
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text(setlist.title)
-                .font(.largeTitle)
+            HStack {
+                Text(setlist.title)
+                    .font(.largeTitle)
+                Spacer()
+                Menu {
+                    Button("Edit details") {
+                        isShowingEditSetlist.toggle()
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                }
+            }
+            Divider()
             HStack {
                 Text(setlist.author.name)
                 Text("|")
@@ -32,6 +45,9 @@ struct SetlistView: View {
             }
         }
         .padding()
+        .sheet(isPresented: $isShowingEditSetlist) {
+            CreateSetlist(setlists: $setlists, oldSetlist: $setlist.wrappedValue)
+        }
     }
     func move(from source: IndexSet, to destination: Int) {
         setlist.tracks.move(fromOffsets: source, toOffset: destination)
