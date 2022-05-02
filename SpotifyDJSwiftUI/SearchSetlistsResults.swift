@@ -24,7 +24,7 @@ struct SearchSetlistsResults: View {
     var body: some View {
         List {
             ForEach(filteredSetlists) { setlist in
-                NavigationLink(destination: SetlistView(setlist: setlist)) {
+                NavigationLink(destination: SetlistView(setlist: setlist, setlists: $setlists)) {
                     Text(setlist.title)
                 }
             }

@@ -9,12 +9,10 @@ import SwiftUI
 
 struct CreateSetlist: View {
     @Environment(\.dismiss) var dismiss
-    
     @Binding var setlists: [Setlist]
-    var oldSetlist: Setlist?
     @State private var newName: String = ""
     @State private var newDescription: String = ""
-    
+    var oldSetlist: Setlist?
     
     var body: some View {
         VStack {
@@ -22,20 +20,8 @@ struct CreateSetlist: View {
                 Button("Cancel") { dismiss() }
                 Spacer()
                 Button("Save") { // Create new setlist in db and update setlists var
-                    /* TODO:
-                     Put logic here to determine whether oldName and oldDescription was passed and if so update existing setlist rather than create new one.*/
                     let db = try! SQLiteDatabase.open(path: pathToDatabase)
-                    if oldSetlist != nil {
-                        var newSetlist: Setlist = oldSetlist!
-                        newSetlist.title = $newName.wrappedValue
-                        newSetlist.description = $newDescription.wrappedValue
-                        do {
-                            try db.updateSetlist(setlist: newSetlist)
-                        } catch {
-                            print("Failed to update setlist with ID \(newSetlist.id)")
-                        }
-                    }
-                    do {
+                    do { // use do-catch syntax to catch any errors from createSetlist()
                         try db.createSetlist(name: $newName.wrappedValue, authorUserID: 1, description: $newDescription.wrappedValue)
                     } catch {
                         print("DEBUG: Failed to create setlist")

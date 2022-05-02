@@ -10,6 +10,7 @@ import SwiftUI
 struct SetlistView: View {
     
     var setlist: Setlist
+    @Binding var setlists: [Setlist]
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,14 +21,15 @@ struct SetlistView: View {
             }
             Divider()
             HStack {
-                Text(setlist.author.name)
+                NavigationLink(setlist.author.name, destination: UserDetail(user: setlist.author))
                 Text("|")
                 Text("Duration: \(setlist.durationMinsSecs)")
+                Text("|")
                 Text("ID: \(setlist.id)")
             }
             List {
                 ForEach(setlist.tracks) { track in
-                    TrackRow(track: track)
+                    TrackRow(track: track, setlists: $setlists)
                 }
             }
         }

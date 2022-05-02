@@ -9,16 +9,15 @@ import SwiftUI
 
 struct TrackRow: View {
     var track: Track
+    @Binding var setlists: [Setlist]
+    
+    let db = try! SQLiteDatabase.open(path: pathToDatabase)
     
     var body: some View {
         HStack {
             HStack {
                 VStack(alignment: .leading) {
                     Text(track.title)
-//                    Text(track.artist)
-//                        .font(.caption)
-//                        .frame(width: 200)
-//                        .lineLimit(1)
                 }
                 Spacer()
                 Text(track.readableGenres)
@@ -29,7 +28,16 @@ struct TrackRow: View {
                 Text(String(track.HMSduration))
                 Spacer()
                 Menu {
-                    Button("Dummy action", action: doNothing)
+                    Menu {
+                        ForEach(setlists) { setlist in
+                            Button(setlist.title, action: {
+                                try! db.addTrackToSetlist(trackID: track.id, setlistID: setlist.id)
+                                setlists = db.getSetlists()!
+                            })
+                        }
+                    } label: {
+                        Text("Add to setlist")
+                    }
                 } label: {
                     Image(systemName: "ellipsis")
                 }
@@ -37,8 +45,6 @@ struct TrackRow: View {
                 
             }
         }
-//        .padding(.leading)
-//        .padding(.trailing)
     }
 }
 

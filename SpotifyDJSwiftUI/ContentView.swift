@@ -12,6 +12,7 @@ let pathToDatabase = "/Users/alex/Documents/School/2022/Digital/IA2/SpotifyDJSwi
 
 struct ContentView: View {
     @State private var setlists: [Setlist]
+    @State private var users: [User]
     @State private var showingAddSetlist: Bool = false
     
     let db: SQLiteDatabase
@@ -19,27 +20,27 @@ struct ContentView: View {
     init() {
         try! db = SQLiteDatabase.open(path: pathToDatabase)
         /* Why it's fine to ignore errors from SQLiteDatabase.open()
-         `try!` asserts at runtime that SQLiteDatabase.open() will not throw an error, despite it being a throwing function. This is appropriate because database.db is bundled with the app at compile, meaning that it will never not be present. Were it to be lost, the entire functionality of the app would be lost, so a catastrophic runtime error is appropriate.
+         `try!` asserts at runtime that SQLiteDatabase.open() will not throw an error, despite it being a throwing function. This is appropriate because database.db is bundled with the app at compile time, meaning that it will never not be present. Were it to be lost, the entire functionality of the app would be lost, so a catastrophic runtime error is appropriate.
          */
         setlists = db.getSetlists() ?? []
-        print(setlists)
+        users = db.getUsers()
     }
 
     var body: some View {
         NavigationView {
             List {
                 NavigationLink {
-                    SearchTracks()
+                    SearchUsers(users: $users)
                 } label: {
                     Label("Connect", systemImage: "person.2")
                 }
                 NavigationLink {
-                    SearchTracks()
+                    SearchTracks(setlists: $setlists)
                 } label: {
-                    Label("Search", systemImage: "gear")
+                    Label("Search tracks", systemImage: "magnifyingglass")
                 }
                 NavigationLink {
-                    SearchTracks()
+                    SearchSetlists(setlists: $setlists)
                 } label: {
                     Label("Setlists", systemImage: "books.vertical")
                 }
@@ -62,13 +63,12 @@ struct ContentView: View {
                     }
             
                 ForEach(setlists) { setlist in
-                    NavigationLink(destination: SetlistView(setlist: setlist)) {
-                        /* Making this binding work took bloody ages, solution and explanation in Paul B's answer at https://stackoverflow.com/questions/57340575/binding-and-foreach-in-swiftui*/
+                    NavigationLink(destination: SetlistView(setlist: setlist, setlists: $setlists)) {
                         Text(setlist.title)
                     }
                 }
             }
-            .navigationTitle("SpotifyDJ")
+            .navigationTitle("DJ Companion")
             .listStyle(SidebarListStyle())
         }
     }

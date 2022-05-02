@@ -20,6 +20,10 @@
 		FA2DA0A327ED50E5003F52B8 /* SearchTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */; };
 		FA50EBC4281F60CE00044798 /* SearchSetlists.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC3281F60CE00044798 /* SearchSetlists.swift */; };
 		FA50EBC6281F6AA700044798 /* SearchSetlistsResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */; };
+		FA50EBC8281F8D0300044798 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC7281F8D0300044798 /* SearchBar.swift */; };
+		FA50EBCA281FA3C300044798 /* UserDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC9281FA3C300044798 /* UserDetail.swift */; };
+		FA50EBCC281FB03B00044798 /* SearchUsers.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBCB281FB03B00044798 /* SearchUsers.swift */; };
+		FA50EBCE281FB1FE00044798 /* SearchUsersResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBCD281FB1FE00044798 /* SearchUsersResults.swift */; };
 		FA535A6127F3E33D00E8289B /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A6027F3E33D00E8289B /* Definitions.swift */; };
 		FA535A652802BB4C00E8289B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A642802BB4C00E8289B /* User.swift */; };
 		FA535A67280304B400E8289B /* CreateSetlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A66280304B400E8289B /* CreateSetlist.swift */; };
@@ -60,6 +64,10 @@
 		FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTracks.swift; sourceTree = "<group>"; };
 		FA50EBC3281F60CE00044798 /* SearchSetlists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSetlists.swift; sourceTree = "<group>"; };
 		FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSetlistsResults.swift; sourceTree = "<group>"; };
+		FA50EBC7281F8D0300044798 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
+		FA50EBC9281FA3C300044798 /* UserDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDetail.swift; sourceTree = "<group>"; };
+		FA50EBCB281FB03B00044798 /* SearchUsers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsers.swift; sourceTree = "<group>"; };
+		FA50EBCD281FB1FE00044798 /* SearchUsersResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUsersResults.swift; sourceTree = "<group>"; };
 		FA535A6027F3E33D00E8289B /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
 		FA535A642802BB4C00E8289B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA535A66280304B400E8289B /* CreateSetlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSetlist.swift; sourceTree = "<group>"; };
@@ -128,8 +136,12 @@
 				FA2DA07A27ED4C8F003F52B8 /* ContentView.swift */,
 				FA50EBC3281F60CE00044798 /* SearchSetlists.swift */,
 				FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */,
+				FA50EBCB281FB03B00044798 /* SearchUsers.swift */,
+				FA50EBCD281FB1FE00044798 /* SearchUsersResults.swift */,
+				FA50EBC7281F8D0300044798 /* SearchBar.swift */,
 				FA535A66280304B400E8289B /* CreateSetlist.swift */,
 				FA003BBF27F2AD4900970872 /* SetlistView.swift */,
+				FA50EBC9281FA3C300044798 /* UserDetail.swift */,
 				FAE034D527F2B44600352863 /* TrackRow.swift */,
 				FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */,
 				FA535A6027F3E33D00E8289B /* Definitions.swift */,
@@ -295,6 +307,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FA50EBC8281F8D0300044798 /* SearchBar.swift in Sources */,
+				FA50EBCA281FA3C300044798 /* UserDetail.swift in Sources */,
 				FA50EBC4281F60CE00044798 /* SearchSetlists.swift in Sources */,
 				FA2DA0A327ED50E5003F52B8 /* SearchTracks.swift in Sources */,
 				FA2DA07B27ED4C8F003F52B8 /* ContentView.swift in Sources */,
@@ -302,9 +316,11 @@
 				FA535A67280304B400E8289B /* CreateSetlist.swift in Sources */,
 				FA535A6127F3E33D00E8289B /* Definitions.swift in Sources */,
 				FA50EBC6281F6AA700044798 /* SearchSetlistsResults.swift in Sources */,
+				FA50EBCC281FB03B00044798 /* SearchUsers.swift in Sources */,
 				FA2DA07927ED4C8F003F52B8 /* SpotifyDJSwiftUIApp.swift in Sources */,
 				FA003BBE27F2A60900970872 /* Setlist.swift in Sources */,
 				FA003BBC27F2A5E900970872 /* Track.swift in Sources */,
+				FA50EBCE281FB1FE00044798 /* SearchUsersResults.swift in Sources */,
 				FA535A652802BB4C00E8289B /* User.swift in Sources */,
 				FA003BC027F2AD4900970872 /* SetlistView.swift in Sources */,
 			);

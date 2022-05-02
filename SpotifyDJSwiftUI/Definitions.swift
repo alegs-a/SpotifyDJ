@@ -7,9 +7,10 @@
 
 import Foundation
 import SQLite3
+import SwiftUI
 
 func millisToMinsSecs(milliseconds: Int) -> String {
-    let totalSeconds: Int = milliseconds/1000 // implicitly returns Int
+    let totalSeconds: Int = milliseconds/1000 // Division of two Ints implicitly returns Int
     let totalMinutes: Int = totalSeconds/60
     if totalMinutes == 0 { // Catches division by 0 error in `totalSeconds%totalMinutes`
         var output = "\(totalMinutes):"
@@ -20,7 +21,7 @@ func millisToMinsSecs(milliseconds: Int) -> String {
         }
         return output
     } // Implicit 'else' since if clause returns
-        let remainderSeconds: Int = totalSeconds%6
+        let remainderSeconds: Int = totalSeconds % 60
         var output = "\(totalMinutes):"
         if String(remainderSeconds).count == 1 {
             output += "0\(remainderSeconds)"
@@ -30,9 +31,26 @@ func millisToMinsSecs(milliseconds: Int) -> String {
         return output
 }
 
+func categoriseTrackValue(value: Double) -> String {
+    switch value {
+    case 0.8...1:
+        return "high"
+    case 0.6..<0.8:
+        return "med"
+    default:
+        return "low"
+    }
+}
 
-func move<T>(from source: IndexSet, to destination: Int, array: inout [T])  {
-    array.move(fromOffsets: source, toOffset: destination)
+extension Color {
+    static var random: Color {
+        /* Used to generate random color for user profile*/
+        return Color(
+            red: .random(in: 0...0.5),
+            green: .random(in: 0...0.5),
+            blue: .random(in: 0...0.5)
+        )
+    }
 }
 
 enum SQLiteError: Error {
@@ -41,6 +59,11 @@ enum SQLiteError: Error {
     case Step(message: String)
     case Bind(message: String)
     case UpdateSetlist(message: String)
+}
+
+enum EventType: String, CaseIterable, Identifiable {
+    case danceParty, wedding, RestaurantDining, none
+    var id: Self { self }
 }
 
 class SQLiteDatabase {
@@ -101,9 +124,7 @@ extension SQLiteDatabase {
         /* Adds the passed Setlist to the setlists table in SQL database */
         let insertSQL = "INSERT INTO setlists (name, author_user_ID, description) VALUES (?, ?, ?)" // setlist_ID is omitted since it is a PRIMARY KEY AUTOINCREMENT field, meaning it automatically populates itself with a unique value upon record creation.
         let insertStatement = try prepareStatement(sql: insertSQL )
-        defer {
-            sqlite3_finalize(insertStatement)
-        }
+        defer { sqlite3_finalize(insertStatement) }
         guard
             sqlite3_bind_text(insertStatement, 1, NSString(string: name).utf8String, -1, nil) == SQLITE_OK
                 && sqlite3_bind_int(insertStatement, 2, Int32(Double(authorUserID))) == SQLITE_OK
@@ -124,6 +145,7 @@ extension SQLiteDatabase {
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
             return []
         }
+        defer { sqlite3_finalize(queryStatement) }
         var output: [String] = []
         while sqlite3_step(queryStatement) == SQLITE_ROW {
             output.append(String(cString: sqlite3_column_text(queryStatement, 0)))
@@ -138,6 +160,7 @@ extension SQLiteDatabase {
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
             return nil
         }
+        defer { sqlite3_finalize(queryStatement) }
         var output: Track?
         while sqlite3_step(queryStatement) == SQLITE_ROW {
              output = Track( // These fields are in the wrong order
@@ -146,15 +169,15 @@ extension SQLiteDatabase {
                 duration: Int(sqlite3_column_int(queryStatement, 2)),
                 key: Int(sqlite3_column_int(queryStatement, 3)),
                 mode: Int(sqlite3_column_int(queryStatement, 4)),
-                tempo: Float(sqlite3_column_double(queryStatement, 5)),
-                danceability: Float(sqlite3_column_double(queryStatement, 6)),
-                energy: Float(sqlite3_column_double(queryStatement, 7)),
-                loudness: Float(sqlite3_column_double(queryStatement, 8)),
-                speechiness: Float(sqlite3_column_double(queryStatement, 9)),
-                acousticness: Float(sqlite3_column_double(queryStatement, 10)),
-                instrumentalness: Float(sqlite3_column_double(queryStatement, 11)),
-                liveness: Float(sqlite3_column_double(queryStatement, 12)),
-                valence: Float(sqlite3_column_double(queryStatement, 13)),
+                tempo: Double(sqlite3_column_double(queryStatement, 5)),
+                danceability: Double(sqlite3_column_double(queryStatement, 6)),
+                energy: Double(sqlite3_column_double(queryStatement, 7)),
+                loudness: Double(sqlite3_column_double(queryStatement, 8)),
+                speechiness: Double(sqlite3_column_double(queryStatement, 9)),
+                acousticness: Double(sqlite3_column_double(queryStatement, 10)),
+                instrumentalness: Double(sqlite3_column_double(queryStatement, 11)),
+                liveness: Double(sqlite3_column_double(queryStatement, 12)),
+                valence: Double(sqlite3_column_double(queryStatement, 13)),
                 genres: getGenresForTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 0)))
             )
         }
@@ -164,10 +187,11 @@ extension SQLiteDatabase {
 
 extension SQLiteDatabase {
     func getTracks() throws -> [Track] {
-        let querySQL = "SELECT track_ID, title, duration_ms, key, mode, tempo, danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, time_signature FROM tracks;"
+        let querySQL = "SELECT track_ID, title, duration_ms, key, mode, tempo, danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, time_signature FROM tracks ORDER BY key LIMIT 100;"
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
             throw SQLiteError.Prepare(message: errorMessage)
         }
+        defer { sqlite3_finalize(queryStatement) }
         var output: [Track] = []
         while sqlite3_step(queryStatement) == SQLITE_ROW {
             output.append(
@@ -177,15 +201,15 @@ extension SQLiteDatabase {
                     duration: Int(sqlite3_column_int(queryStatement, 2)),
                     key: Int(sqlite3_column_int(queryStatement, 3)),
                     mode: Int(sqlite3_column_int(queryStatement, 4)),
-                    tempo: Float(sqlite3_column_double(queryStatement, 5)),
-                    danceability: Float(sqlite3_column_double(queryStatement, 6)),
-                    energy: Float(sqlite3_column_double(queryStatement, 7)),
-                    loudness: Float(sqlite3_column_double(queryStatement, 8)),
-                    speechiness: Float(sqlite3_column_double(queryStatement, 9)),
-                    acousticness: Float(sqlite3_column_double(queryStatement, 10)),
-                    instrumentalness: Float(sqlite3_column_double(queryStatement, 11)),
-                    liveness: Float(sqlite3_column_double(queryStatement, 12)),
-                    valence: Float(sqlite3_column_double(queryStatement, 13)),
+                    tempo: Double(sqlite3_column_double(queryStatement, 5)),
+                    danceability: Double(sqlite3_column_double(queryStatement, 6)),
+                    energy: Double(sqlite3_column_double(queryStatement, 7)),
+                    loudness: Double(sqlite3_column_double(queryStatement, 8)),
+                    speechiness: Double(sqlite3_column_double(queryStatement, 9)),
+                    acousticness: Double(sqlite3_column_double(queryStatement, 10)),
+                    instrumentalness: Double(sqlite3_column_double(queryStatement, 11)),
+                    liveness: Double(sqlite3_column_double(queryStatement, 12)),
+                    valence: Double(sqlite3_column_double(queryStatement, 13)),
                     genres: getGenresForTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 0)))
                 )
             )
@@ -230,7 +254,7 @@ extension SQLiteDatabase {
                      SQLite does not create the extra hidden field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
                     id: Int(sqlite3_column_int(queryStatement, 0)),
                     title: String(cString: sqlite3_column_text(queryStatement, 1)),
-                    author: User(id: 1, name: "dummy", description: "dummy"),
+                    author: getUser(userID: Int(sqlite3_column_int(queryStatement, 2)))!,
                     description: String(cString: sqlite3_column_text(queryStatement, 3)),
                     tracks: getTracksFromSetlist(setlistID: Int(sqlite3_column_int(queryStatement, 0)))
                 )
@@ -241,16 +265,51 @@ extension SQLiteDatabase {
 }
 
 extension SQLiteDatabase {
-    func updateSetlist(setlist: Setlist) throws {
-        let querySQL = "UPDATE setlists SET name = '\(setlist.title)', description = '\(setlist.description)' WHERE setlist_ID = \(setlist.id);"
+    func addTrackToSetlist(trackID: String, setlistID: Int) throws {
+        let querySQL = "INSERT INTO setlist_tracks (trackID, setlistID) VALUES ('\(trackID)', \(setlistID));"
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
             throw SQLiteError.UpdateSetlist(message: errorMessage)
         }
-        defer {
-            sqlite3_finalize(queryStatement)
-        }
+        sqlite3_finalize(queryStatement)
     }
 }
 
+extension SQLiteDatabase {
+    func createUser(name: String, description: String) {
+        let querySQL = "INSERT INTO users (name, bio) VALUES ('\(name)', '\(description)');"
+        let queryStatement = try! prepareStatement(sql: querySQL)
+        sqlite3_finalize(queryStatement)
+    }
+}
 
-func doNothing() { } // For debugging purposes
+extension SQLiteDatabase {
+    func getUser(userID: Int) -> User? {
+        let querySQL = "SELECT user_ID, name, bio FROM users WHERE user_ID = \(userID);"
+        guard let queryStatement = try? prepareStatement(sql: querySQL) else {
+            return nil
+        }
+        defer { sqlite3_finalize(queryStatement) }
+        while sqlite3_step(queryStatement) == SQLITE_ROW {
+            return User(
+                id: Int(sqlite3_column_int(queryStatement, 0)),
+                name: String(cString: sqlite3_column_text(queryStatement, 1)),
+                description: String(cString: sqlite3_column_text(queryStatement, 2))
+            )
+        }
+        return nil
+    }
+}
+
+extension SQLiteDatabase {
+    func getUsers() -> [User] {
+        let querySQL = "SELECT user_ID FROM users;"
+        guard let queryStatement = try? prepareStatement(sql: querySQL) else {
+            return []
+        }
+        var output: [User] = []
+        while sqlite3_step(queryStatement) == SQLITE_ROW {
+            output.append(getUser(userID: Int(sqlite3_column_int(queryStatement, 0)))!)
+        }
+        return output
+    }
+}

@@ -7,8 +7,8 @@
 
 import Foundation
 
-private var highThreshold: Float = 0.7
-private var loudnessLowThreshold: Float = -8
+private var highThreshold: Double = 0.7
+private var loudnessLowThreshold: Double = -8
     
 struct Track: Identifiable {
     var id: String
@@ -16,15 +16,15 @@ struct Track: Identifiable {
     var duration: Int // track duration in milliseconds
     var key: Int
     var mode: Int
-    var tempo: Float
-    var danceability: Float
-    var energy: Float
-    var loudness: Float
-    var speechiness: Float
-    var acousticness: Float
-    var instrumentalness: Float
-    var liveness: Float
-    var valence: Float
+    var tempo: Double
+    var danceability: Double
+    var energy: Double
+    var loudness: Double
+    var speechiness: Double
+    var acousticness: Double
+    var instrumentalness: Double
+    var liveness: Double
+    var valence: Double
     var genres: [String]
     
     // Computed properties
@@ -39,24 +39,33 @@ struct Track: Identifiable {
     }
     
     var suitableDanceParty: Bool {
-        if danceability > highThreshold && tempo > highThreshold && energy > highThreshold {
+        if categoriseTrackValue(value: danceability) == "high" && categoriseTrackValue(value: tempo) == "high" && categoriseTrackValue(value: energy) == "high" {
             return true
         } else {
             return false
         }
     }
     var suitableWedding: Bool {
-        if danceability > highThreshold && loudness < loudnessLowThreshold && valence > highThreshold {
+        if categoriseTrackValue(value: danceability) == "high" && loudness < loudnessLowThreshold && categoriseTrackValue(value: valence) == "high" {
             return true
         } else {
             return false
         }
     }
     var suitableRestaurantDining: Bool {
-        if acousticness > highThreshold && loudness < loudnessLowThreshold {
+        if categoriseTrackValue(value: acousticness) == "high" && loudness < loudnessLowThreshold {
             return true
         } else {
             return false
         }
+    }
+    
+    func trackContainsString(searchQuery: String) -> Bool {
+        for genre in genres {
+            if genre.localizedCaseInsensitiveContains(searchQuery) {
+                return true
+            }
+        }
+        return title.localizedCaseInsensitiveContains(searchQuery) // Execution only reaches this line if none of the track's genres match the query, meaning that the value of title.localizedCaseInsensitiveContains() is the value the function should return
     }
 }
