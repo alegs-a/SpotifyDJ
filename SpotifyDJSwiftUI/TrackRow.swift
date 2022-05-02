@@ -21,6 +21,9 @@ struct TrackRow: View {
 //                        .lineLimit(1)
                 }
                 Spacer()
+                Text(track.readableGenres)
+                    .foregroundColor(.gray)
+                Spacer()
             }
             HStack {
                 Text(String(track.HMSduration))

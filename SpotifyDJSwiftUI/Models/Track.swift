@@ -25,10 +25,18 @@ struct Track: Identifiable {
     var instrumentalness: Float
     var liveness: Float
     var valence: Float
+    var genres: [String]
     
     // Computed properties
     var HMSduration: String { millisToMinsSecs(milliseconds: duration) }
     var CDuration: Int32 { Int32("\(duration)") ?? 0 }
+    var readableGenres: String {
+        var output: String = ""
+        for genre in genres {
+            output += "\(genre.capitalized)  "
+        }
+        return output
+    }
     
     var suitableDanceParty: Bool {
         if danceability > highThreshold && tempo > highThreshold && energy > highThreshold {

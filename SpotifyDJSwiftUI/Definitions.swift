@@ -119,6 +119,20 @@ extension SQLiteDatabase {
 }
 
 extension SQLiteDatabase {
+    func getGenresForTrack(trackID: String) -> [String] {
+        let querySQL = "SELECT genre FROM genres WHERE track_ID = '\(trackID)';"
+        guard let queryStatement = try? prepareStatement(sql: querySQL) else {
+            return []
+        }
+        var output: [String] = []
+        while sqlite3_step(queryStatement) == SQLITE_ROW {
+            output.append(String(cString: sqlite3_column_text(queryStatement, 0)))
+        }
+        return output
+    }
+}
+
+extension SQLiteDatabase {
     func getTrack(trackID: String) -> Track? {
         let querySQL = "SELECT track_ID, title, duration_ms, key, mode, tempo, danceability, energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, time_signature FROM tracks WHERE track_ID = '\(trackID)';"
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
@@ -140,7 +154,8 @@ extension SQLiteDatabase {
                 acousticness: Float(sqlite3_column_double(queryStatement, 10)),
                 instrumentalness: Float(sqlite3_column_double(queryStatement, 11)),
                 liveness: Float(sqlite3_column_double(queryStatement, 12)),
-                valence: Float(sqlite3_column_double(queryStatement, 13))
+                valence: Float(sqlite3_column_double(queryStatement, 13)),
+                genres: getGenresForTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 0)))
             )
         }
         return output
@@ -170,7 +185,8 @@ extension SQLiteDatabase {
                     acousticness: Float(sqlite3_column_double(queryStatement, 10)),
                     instrumentalness: Float(sqlite3_column_double(queryStatement, 11)),
                     liveness: Float(sqlite3_column_double(queryStatement, 12)),
-                    valence: Float(sqlite3_column_double(queryStatement, 13))
+                    valence: Float(sqlite3_column_double(queryStatement, 13)),
+                    genres: getGenresForTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 0)))
                 )
             )
         }
@@ -180,7 +196,8 @@ extension SQLiteDatabase {
 
 extension SQLiteDatabase {
     func getTracksFromSetlist(setlistID: Int) -> [Track] {
-        let querySQL = "SELECT trackID FROM setlists WHERE setlistID = \(setlistID);"
+        /* select tracks from setlist_tracks which */
+        let querySQL = "SELECT trackID FROM setlist_tracks WHERE setlistID = \(setlistID);"
         guard let queryStatement = try? prepareStatement(sql: querySQL) else {
             return []
         }
@@ -189,7 +206,7 @@ extension SQLiteDatabase {
         }
         var output: [Track] = []
         while sqlite3_step(queryStatement) == SQLITE_ROW {
-            output.append(getTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 1)))!)
+            output.append(getTrack(trackID: String(cString: sqlite3_column_text(queryStatement, 0)))!)
         }
         return output
     }
@@ -206,15 +223,17 @@ extension SQLiteDatabase {
         }
         var output: [Setlist] = []
         while sqlite3_step(queryStatement) == SQLITE_ROW {
-            output.append(Setlist(
-                /* NOTE: Because the table 'setlists' was declared with the field
-                    setlist_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                 SQLite does not create the extra hidden field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
-                id: Int(sqlite3_column_int(queryStatement, 0)),
-                title: String(cString: sqlite3_column_text(queryStatement, 1)),
-                author: User(id: 1, name: "dummy", description: "dummy"),
-                description: String(cString: sqlite3_column_text(queryStatement, 3)),
-                tracks: [])
+            output.append(
+                Setlist(
+                    /* NOTE: Because the table 'setlists' was declared with the field
+                        setlist_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+                     SQLite does not create the extra hidden field 'rowID' as it usually would. I can only assume that rowID is silently passed to any SELECT statements made, which creates the 1-indexed weirdness that is usually present. However, because the field rowID does not exist in the table setlists and therefore is not passed, we can use a zero-index to access our results like normal programmers.*/
+                    id: Int(sqlite3_column_int(queryStatement, 0)),
+                    title: String(cString: sqlite3_column_text(queryStatement, 1)),
+                    author: User(id: 1, name: "dummy", description: "dummy"),
+                    description: String(cString: sqlite3_column_text(queryStatement, 3)),
+                    tracks: getTracksFromSetlist(setlistID: Int(sqlite3_column_int(queryStatement, 0)))
+                )
             )
         }
         return output

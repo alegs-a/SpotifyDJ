@@ -27,6 +27,14 @@ struct Setlist: Identifiable {
     var NStitle: NSString { title as NSString }
     var i32authorID: Int32 { Int32(Double(author.id)) }
     var NSdescription: NSString { description as NSString }
+    
+    func setlistContainsString(searchQuery: String) -> Bool {
+        if String(id).localizedCaseInsensitiveContains(searchQuery) || title.localizedCaseInsensitiveContains(searchQuery) || author.name.localizedCaseInsensitiveContains(searchQuery) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
 
 /*

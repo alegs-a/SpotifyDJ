@@ -17,9 +17,10 @@
 		FA2DA08A27ED4C91003F52B8 /* SpotifyDJSwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA08927ED4C91003F52B8 /* SpotifyDJSwiftUITests.swift */; };
 		FA2DA09427ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA09327ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift */; };
 		FA2DA09627ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA09527ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift */; };
-		FA2DA0A327ED50E5003F52B8 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA0A227ED50E5003F52B8 /* Search.swift */; };
+		FA2DA0A327ED50E5003F52B8 /* SearchTracks.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */; };
+		FA50EBC4281F60CE00044798 /* SearchSetlists.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC3281F60CE00044798 /* SearchSetlists.swift */; };
+		FA50EBC6281F6AA700044798 /* SearchSetlistsResults.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */; };
 		FA535A6127F3E33D00E8289B /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A6027F3E33D00E8289B /* Definitions.swift */; };
-		FA535A6327FBF29000E8289B /* SetlistList.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A6227FBF29000E8289B /* SetlistList.swift */; };
 		FA535A652802BB4C00E8289B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A642802BB4C00E8289B /* User.swift */; };
 		FA535A67280304B400E8289B /* CreateSetlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA535A66280304B400E8289B /* CreateSetlist.swift */; };
 		FAE034D627F2B44600352863 /* TrackRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE034D527F2B44600352863 /* TrackRow.swift */; };
@@ -56,9 +57,10 @@
 		FA2DA08F27ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpotifyDJSwiftUIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2DA09327ED4C91003F52B8 /* SpotifyDJSwiftUIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDJSwiftUIUITests.swift; sourceTree = "<group>"; };
 		FA2DA09527ED4C91003F52B8 /* SpotifyDJSwiftUIUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpotifyDJSwiftUIUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		FA2DA0A227ED50E5003F52B8 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTracks.swift; sourceTree = "<group>"; };
+		FA50EBC3281F60CE00044798 /* SearchSetlists.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSetlists.swift; sourceTree = "<group>"; };
+		FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSetlistsResults.swift; sourceTree = "<group>"; };
 		FA535A6027F3E33D00E8289B /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
-		FA535A6227FBF29000E8289B /* SetlistList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetlistList.swift; sourceTree = "<group>"; };
 		FA535A642802BB4C00E8289B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		FA535A66280304B400E8289B /* CreateSetlist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateSetlist.swift; sourceTree = "<group>"; };
 		FAE034D527F2B44600352863 /* TrackRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackRow.swift; sourceTree = "<group>"; };
@@ -124,11 +126,12 @@
 			children = (
 				FA2DA07827ED4C8F003F52B8 /* SpotifyDJSwiftUIApp.swift */,
 				FA2DA07A27ED4C8F003F52B8 /* ContentView.swift */,
+				FA50EBC3281F60CE00044798 /* SearchSetlists.swift */,
+				FA50EBC5281F6AA700044798 /* SearchSetlistsResults.swift */,
 				FA535A66280304B400E8289B /* CreateSetlist.swift */,
 				FA003BBF27F2AD4900970872 /* SetlistView.swift */,
-				FA535A6227FBF29000E8289B /* SetlistList.swift */,
 				FAE034D527F2B44600352863 /* TrackRow.swift */,
-				FA2DA0A227ED50E5003F52B8 /* Search.swift */,
+				FA2DA0A227ED50E5003F52B8 /* SearchTracks.swift */,
 				FA535A6027F3E33D00E8289B /* Definitions.swift */,
 				FA003BBA27F2A5B600970872 /* Models */,
 				FA2DA07C27ED4C91003F52B8 /* Assets.xcassets */,
@@ -292,12 +295,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FA2DA0A327ED50E5003F52B8 /* Search.swift in Sources */,
+				FA50EBC4281F60CE00044798 /* SearchSetlists.swift in Sources */,
+				FA2DA0A327ED50E5003F52B8 /* SearchTracks.swift in Sources */,
 				FA2DA07B27ED4C8F003F52B8 /* ContentView.swift in Sources */,
 				FAE034D627F2B44600352863 /* TrackRow.swift in Sources */,
 				FA535A67280304B400E8289B /* CreateSetlist.swift in Sources */,
 				FA535A6127F3E33D00E8289B /* Definitions.swift in Sources */,
-				FA535A6327FBF29000E8289B /* SetlistList.swift in Sources */,
+				FA50EBC6281F6AA700044798 /* SearchSetlistsResults.swift in Sources */,
 				FA2DA07927ED4C8F003F52B8 /* SpotifyDJSwiftUIApp.swift in Sources */,
 				FA003BBE27F2A60900970872 /* Setlist.swift in Sources */,
 				FA003BBC27F2A5E900970872 /* Track.swift in Sources */,

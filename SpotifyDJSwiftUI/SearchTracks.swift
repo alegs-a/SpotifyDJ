@@ -7,15 +7,16 @@
 
 import SwiftUI
 
-struct Search: View {
+struct SearchTracks: View {
     var body: some View {
-           Text("Here is the Search screen")
+        let db = try! SQLiteDatabase.open(path: pathToDatabase)
+        var tracks: [Track] = try! db.getTracks()
     }
 }
 
 struct Search_Previews: PreviewProvider {
     static var previews: some View {
-        Search()
+        SearchTracks()
 .previewInterfaceOrientation(.landscapeLeft)
     }
 }

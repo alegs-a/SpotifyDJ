@@ -9,9 +9,7 @@ import SwiftUI
 
 struct SetlistView: View {
     
-    @Binding var setlist: Setlist
-    @Binding var setlists: [Setlist]
-    @State var isShowingEditSetlist: Bool = false
+    var setlist: Setlist
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -19,13 +17,6 @@ struct SetlistView: View {
                 Text(setlist.title)
                     .font(.largeTitle)
                 Spacer()
-                Menu {
-                    Button("Edit details") {
-                        isShowingEditSetlist.toggle()
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                }
             }
             Divider()
             HStack {
@@ -38,19 +29,9 @@ struct SetlistView: View {
                 ForEach(setlist.tracks) { track in
                     TrackRow(track: track)
                 }
-                .onMove(perform: move)
-            }
-            .toolbar {
-                EditButton()
             }
         }
         .padding()
-        .sheet(isPresented: $isShowingEditSetlist) {
-            CreateSetlist(setlists: $setlists, oldSetlist: $setlist.wrappedValue)
-        }
-    }
-    func move(from source: IndexSet, to destination: Int) {
-        setlist.tracks.move(fromOffsets: source, toOffset: destination)
     }
 }
 

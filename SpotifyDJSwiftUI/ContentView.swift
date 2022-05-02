@@ -22,38 +22,47 @@ struct ContentView: View {
          `try!` asserts at runtime that SQLiteDatabase.open() will not throw an error, despite it being a throwing function. This is appropriate because database.db is bundled with the app at compile, meaning that it will never not be present. Were it to be lost, the entire functionality of the app would be lost, so a catastrophic runtime error is appropriate.
          */
         setlists = db.getSetlists() ?? []
+        print(setlists)
     }
 
     var body: some View {
         NavigationView {
             List {
                 NavigationLink {
-                    Search()
+                    SearchTracks()
                 } label: {
-                    Label("Connect", systemImage: "info.circle")
+                    Label("Connect", systemImage: "person.2")
                 }
                 NavigationLink {
-                    Search()
+                    SearchTracks()
                 } label: {
                     Label("Search", systemImage: "gear")
                 }
                 NavigationLink {
-                    Search()
+                    SearchTracks()
                 } label: {
                     Label("Setlists", systemImage: "books.vertical")
                 }
                 
                 Divider()
                 
-                Button("Create Setlist") {
+                NavigationLink {
+                    SearchSetlists(setlists: $setlists)
+                } label: {
+                    Label("Search setlists", systemImage: "magnifyingglass")
+                }
+                
+                Button {
                         showingAddSetlist.toggle()
-                    }
+                } label: {
+                    Label("Create setlist", systemImage: "plus.square")
+                }
                     .sheet(isPresented: $showingAddSetlist) {
                         CreateSetlist(setlists: $setlists)
                     }
             
-                ForEach($setlists) { $setlist in
-                    NavigationLink(destination: SetlistView(setlist: $setlist, setlists: $setlists)) {
+                ForEach(setlists) { setlist in
+                    NavigationLink(destination: SetlistView(setlist: setlist)) {
                         /* Making this binding work took bloody ages, solution and explanation in Paul B's answer at https://stackoverflow.com/questions/57340575/binding-and-foreach-in-swiftui*/
                         Text(setlist.title)
                     }
